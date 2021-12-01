@@ -1,48 +1,16 @@
 <template>
   <div id='home'>
     <nav-bar class='home-nav'><div slot='center'>购物街</div></nav-bar>
-    <home-swiper :banners = 'banners'></home-swiper>
-    <recommend-view :recommends = 'recommends'></recommend-view>
-    <feature-view></feature-view>
-    <tab-control class='tab-control' :titles="['流行','新款','精选']" @currentList='currentList'></tab-control>
-    <goods-list :goodsList="goods[currentType].list"></goods-list>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
-    <div>lalalalllalalallala</div>
+    <scroll class="content" ref='scroll'>
+      <home-swiper :banners = 'banners'></home-swiper>
+      <recommend-view :recommends = 'recommends'></recommend-view>
+      <feature-view></feature-view>
+      <tab-control class='tab-control' :titles="['流行','新款','精选']" @currentList='currentList'></tab-control>
+      <goods-list :goodsList="goods[currentType].list"></goods-list>
+    </scroll>
+    <back-top @click.native='backClick' />
+   
+  
  
   </div>
 
@@ -56,8 +24,9 @@ import RecommendView from '@/views/home/childComps/RecommendView.vue'
 import FeatureView from '@/views/home/childComps/FeatureView.vue'
 import TabControl from '@/components/content/tabControl/TabControl.vue'
 import GoodsList from '@/components/content/goods/GoodsList.vue'
+import Scroll from '@/components/common/scroll/Scroll.vue'
 import {getHomeMultidata,getHomeGoods} from '@/networks/home.js'//接口数据获取
-
+import BackTop from '@/components/content/backTop/BackTop.vue';
 export default {
   name:'Home',
   components:{
@@ -66,7 +35,9 @@ export default {
     RecommendView,
     FeatureView,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll,
+    BackTop
   },
   data(){
     return {
@@ -101,6 +72,12 @@ export default {
       }
        
     },
+    backClick(){
+      //当需要监听一个组件的原生组件时需要添加修饰符native进行监听
+      // console.log('lala');
+      // console.log(this.$refs.scroll);
+      this.$refs.scroll.scrollTo(0,0)
+    },
     //网络请求的方法
     getHomeMultidata(){
       getHomeMultidata().then(res=>{
@@ -117,12 +94,7 @@ export default {
         this.goods[type].page +=1
        
       })
-    },
-    
-
-    
-
-    
+    }, 
   }
   
 }
@@ -131,6 +103,9 @@ export default {
 <style scoped>
 #home{
   padding-top:44px;
+  /* height: 100vh;
+   */
+   position: relative;
 }
 .home-nav{
   position:fixed;
@@ -146,6 +121,16 @@ export default {
   position:sticky;
   top:44px;
   z-index:9;
+}
+.content{
+  
+  position: absolute;
+  height: 100px;
+  top:44px;
+  bottom:49px;
+  left:0;
+  right: 0;
+  /* margin-top:1px; */
 }
 
 </style>

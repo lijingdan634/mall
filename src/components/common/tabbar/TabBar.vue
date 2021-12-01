@@ -25,6 +25,7 @@ export default {
     bottom:0;
     left:0;
     right:0;
+    z-index:20;
     /* box-shadow: x轴偏移程度，y轴偏移程度， 模糊程度 ，颜色+透明度 */
     box-shadow: 0 -1px 1px rgba(100,100,100,0.11);   
   }
