@@ -3,6 +3,47 @@
     <nav-bar class='home-nav'><div slot='center'>购物街</div></nav-bar>
     <home-swiper :banners = 'banners'></home-swiper>
     <recommend-view :recommends = 'recommends'></recommend-view>
+    <feature-view></feature-view>
+    <tab-control class='tab-control' :titles="['流行','新款','精选']" @currentList='currentList'></tab-control>
+    <goods-list :goodsList="goods[currentType].list"></goods-list>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+    <div>lalalalllalalallala</div>
+ 
   </div>
 
   
@@ -12,7 +53,10 @@
 import NavBar from '@/components/common/navbar/NavBar.vue'
 import HomeSwiper from '@/components/common/swiper/HomeSwiper.vue'
 import RecommendView from '@/views/home/childComps/RecommendView.vue'
-import {getHomeMultidata} from '@/networks/home.js'//接口数据获取
+import FeatureView from '@/views/home/childComps/FeatureView.vue'
+import TabControl from '@/components/content/tabControl/TabControl.vue'
+import GoodsList from '@/components/content/goods/GoodsList.vue'
+import {getHomeMultidata,getHomeGoods} from '@/networks/home.js'//接口数据获取
 
 export default {
   name:'Home',
@@ -20,29 +64,88 @@ export default {
     NavBar,
     HomeSwiper,
     RecommendView,
+    FeatureView,
+    TabControl,
+    GoodsList
   },
   data(){
     return {
       banners:[],
       recommends:{},
+      goods:{
+        'pop':{page: 0, list: []},
+        'new':{page: 0, list: []},
+        'sell':{page: 0, list: []},
+      },
+      currentType:'pop'
       // data:{}
     }
   },
   created(){
-    getHomeMultidata().then(res=>{
+    this.getHomeMultidata();
+    this.getHomeGoods('pop');
+    this.getHomeGoods('sell');
+    this.getHomeGoods('new');
+
+  },
+  methods:{
+    // 事件监听的方法
+    currentList(index){
+      // console.log(index);
+      if(index===0){
+        this.currentType ='pop'
+      }else if(index===1){
+        this.currentType ='new'
+      }else if(index===2){
+        this.currentType ='sell'
+      }
+       
+    },
+    //网络请求的方法
+    getHomeMultidata(){
+      getHomeMultidata().then(res=>{
       // this.data = res
       this.banners = res.data.banner.list
       this.recommends = res.data.recommend
-      // console.log(this.data);
-    })
+      })
+    },
+    getHomeGoods(type){
+      const page = this.goods[type].page +1
+      getHomeGoods(type,page).then(res=>{
+        console.log(res);
+        this.goods[type].list.push(...res.data.list)
+        this.goods[type].page +=1
+       
+      })
+    },
+    
+
+    
+
+    
   }
   
 }
 </script>
 
 <style scoped>
+#home{
+  padding-top:44px;
+}
 .home-nav{
+  position:fixed;
+  z-index: 10;
+  left:0;
+  right:0;
+  top:0;
   background-color:var(--color-tint);
   color:white;
+  /* text-align: center; */
 }
+.tab-control{
+  position:sticky;
+  top:44px;
+  z-index:9;
+}
+
 </style>
