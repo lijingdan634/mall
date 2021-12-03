@@ -39,6 +39,7 @@ export default {
     this.scroll.on('scroll',(position)=>{
       // console.log(position);
       this.$emit('scroll',position)
+
     })
     //3.监听加载上拉更多
     this.scroll.on('pullingUp',()=>{
@@ -47,12 +48,16 @@ export default {
     })
     
   },
+ 
   methods:{
     scrollTo(x,y,time=300){
-      this.scroll.scrollTo(x,y,time)
+      this.scroll && this.scroll.scrollTo(x,y,time)
     },
     finishPullUp(){
-      this.scroll.finishPullUp()
+      this.scroll && this.scroll.finishPullUp()
+    },
+    imageRefresh(){
+      this.scroll && this.scroll.refresh()
     }
   }
 }
