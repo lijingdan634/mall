@@ -1,17 +1,20 @@
 <template>
   <div id='home'>
     <nav-bar class='home-nav'><div slot='center'>购物街</div></nav-bar>
-    <scroll class="content" ref='scroll'>
+    <scroll class="content" 
+            ref='scroll' 
+            :probe-type='3' 
+            @scroll='contentScroll'
+            :pull-up-load='true'
+            @pullingUp='loadMore'>
       <home-swiper :banners = 'banners'></home-swiper>
       <recommend-view :recommends = 'recommends'></recommend-view>
       <feature-view></feature-view>
       <tab-control class='tab-control' :titles="['流行','新款','精选']" @currentList='currentList'></tab-control>
       <goods-list :goodsList="goods[currentType].list"></goods-list>
     </scroll>
-    <back-top @click.native='backClick' />
-   
-  
- 
+    <back-top @click.native='backClick' v-show="isShow" />
+
   </div>
 
   
@@ -48,7 +51,8 @@ export default {
         'new':{page: 0, list: []},
         'sell':{page: 0, list: []},
       },
-      currentType:'pop'
+      currentType:'pop',
+      isShow: false,
       // data:{}
     }
   },
@@ -74,9 +78,22 @@ export default {
     },
     backClick(){
       //当需要监听一个组件的原生组件时需要添加修饰符native进行监听
-      // console.log('lala');
-      // console.log(this.$refs.scroll);
+
       this.$refs.scroll.scrollTo(0,0)
+
+    },
+    contentScroll(position){
+      if(position.y < -900){
+        this.isShow = true
+      }else{
+        this.isShow = false
+      }
+    },
+    //下拉加载更多
+    loadMore(){
+      // console.log('上拉加载更多。。。');
+      this.getHomeGoods(this.currentType)
+      // this.$refs.scroll.scroll.refresh()
     },
     //网络请求的方法
     getHomeMultidata(){
@@ -89,10 +106,11 @@ export default {
     getHomeGoods(type){
       const page = this.goods[type].page +1
       getHomeGoods(type,page).then(res=>{
-        console.log(res);
+        // console.log(res);
         this.goods[type].list.push(...res.data.list)
         this.goods[type].page +=1
-       
+
+        this.$refs.scroll.finishPullUp()
       })
     }, 
   }
@@ -102,10 +120,11 @@ export default {
 
 <style scoped>
 #home{
-  padding-top:44px;
-  /* height: 100vh;
-   */
-   position: relative;
+   
+  /* 高度自适应二特有的，通过定位 */
+  position: relative;
+  height: 100vh;  /*给我们home100个视口*/
+    
 }
 .home-nav{
   position:fixed;
@@ -123,14 +142,14 @@ export default {
   z-index:9;
 }
 .content{
-  
+  margin-top: 44px;
+  overflow: hidden;
   position: absolute;
-  height: 100px;
-  top:44px;
-  bottom:49px;
-  left:0;
+  top: 0;
+  left: 0;        
   right: 0;
-  /* margin-top:1px; */
+  bottom: 49px;
+  
 }
 
 </style>
