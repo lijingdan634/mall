@@ -50,14 +50,22 @@ export default {
   },
  
   methods:{
-    scrollTo(x,y,time=300){
+    scrollTo(x, y,time=300){
       this.scroll && this.scroll.scrollTo(x,y,time)
     },
     finishPullUp(){
       this.scroll && this.scroll.finishPullUp()
     },
-    imageRefresh(){
+    refresh(){
       this.scroll && this.scroll.refresh()
+    },
+    getScrollY(){
+      if(this.scroll){
+        return this.scroll.y
+      }else{
+        return 0
+      }
+       
     }
   }
 }

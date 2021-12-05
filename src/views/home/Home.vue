@@ -29,7 +29,7 @@
 
 <script>
 import NavBar from '@/components/common/navbar/NavBar.vue'
-import HomeSwiper from '@/components/common/swiper/HomeSwiper.vue'
+import HomeSwiper from '@/views/home/childComps/HomeSwiper.vue'
 import RecommendView from '@/views/home/childComps/RecommendView.vue'
 import FeatureView from '@/views/home/childComps/FeatureView.vue'
 import TabControl from '@/components/content/tabControl/TabControl.vue'
@@ -62,7 +62,8 @@ export default {
       currentType:'pop',
       isShow: false,
       tabOffsetTop:0, 
-      isTabShow: false
+      isTabShow: false,
+      saveY:0
       // isTabFixed: false,
       // data:{}
     }
@@ -75,9 +76,17 @@ export default {
     this.getHomeGoods('sell');
     this.getHomeGoods('new'); 
   },
-   mounted(){
+  activated(){
+    this.$refs.scroll.scrollTo(0,this.saveY, 0)
+    this.$refs.scroll.refresh()
+  },
+  deactivated(){
+    this.saveY = this.$refs.scroll.getScrollY()
+    // console.log('----离开时'+ this.saveY);
+  },
+  mounted(){
      // 从事件总线（bus总线）中监听图像加载后刷新
-    const refresh = debounce(this.$refs.scroll.imageRefresh,200)
+    const refresh = debounce(this.$refs.scroll.refresh,200)
     this.$bus.$on('ItemImageLoad',() => {
       refresh()
       // console.log('-----');
@@ -174,7 +183,7 @@ export default {
 }
 .fixed{
   position: relative;
-  z-index: 9;
+  z-index: 9; 
 }
 
 </style>

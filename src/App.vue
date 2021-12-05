@@ -1,18 +1,25 @@
 <template>
   <div id="app">
-    <router-view></router-view>
-    <mian-tab-bar/>
+    <!-- exclude的组件，必须要有name -->
+    <keep-alive exclude="Detail">
+      <router-view></router-view>
+    </keep-alive>
+    
+    <main-tab-bar/>
    
   </div>
 </template>
 
 <script>
-  import MianTabBar from '@/components/content/mainTabbar/MianTabBar.vue'
+  import MainTabBar from '@/components/content/mainTabbar/MainTabBar.vue'
   export default {
     name:'App',
     components:{
-      MianTabBar
-    }
+      MainTabBar
+    },
+    
+    
+
   }
 </script>
 
