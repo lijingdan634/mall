@@ -37,7 +37,7 @@ import GoodsList from '@/components/content/goods/GoodsList.vue'
 import Scroll from '@/components/common/scroll/Scroll.vue'
 import {getHomeMultidata,getHomeGoods} from '@/networks/home.js'//接口数据获取
 import BackTop from '@/components/content/backTop/BackTop.vue';
-import {debounce} from '@/common/utils'
+import {itemListenerMixin} from '@/common/mixin.js'
 export default {
   name:'Home',
   components:{
@@ -63,7 +63,7 @@ export default {
       isShow: false,
       tabOffsetTop:0, 
       isTabShow: false,
-      saveY:0
+      saveY:0, 
       // isTabFixed: false,
       // data:{}
     }
@@ -77,21 +77,19 @@ export default {
     this.getHomeGoods('new'); 
   },
   activated(){
+    this.$refs.scroll.refresh()
     this.$refs.scroll.scrollTo(0,this.saveY, 0)
     this.$refs.scroll.refresh()
   },
   deactivated(){
     this.saveY = this.$refs.scroll.getScrollY()
-    // console.log('----离开时'+ this.saveY);
+    this.$bus.$off('ItemImageLoad',this.itemImgListener)
   },
   mounted(){
      // 从事件总线（bus总线）中监听图像加载后刷新
-    const refresh = debounce(this.$refs.scroll.refresh,200)
-    this.$bus.$on('ItemImageLoad',() => {
-      refresh()
-      // console.log('-----');
-    })
+
    },
+  mixins:[itemListenerMixin],
   methods:{
     //轮播图加载完成
    SwiperImageLoad(){
