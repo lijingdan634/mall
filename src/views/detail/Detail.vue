@@ -1,16 +1,26 @@
 <template>
   <div id='detail'>
-    <detail-nav-bar class='detail-nav-bar' />
-    <scroll class='content' ref='scroll'>
+    <detail-nav-bar class='detail-nav-bar'
+                    @titleClick= 'titleClick'
+                    ref='nav' />
+    <scroll class='content' 
+            ref='scroll'
+            @scroll='contentScroll'
+            :probeType='3'>
       <detail-swiper :topImages = 'topImages'></detail-swiper>
       <detail-base-info :goods='goods' />
       <detail-shop-info :shopInfo='shopInfo' />
       <detail-goods-info :detailInfo='detailInfo'
-                         @imageLoad='imageLoad'/>
+                         @imageLoad='imageLoad'
+                         ref='detailGoodsInfo'/>
       <detail-param-info :paramInfo='paramInfo'/>
-      <detail-comment-info :commentInfo='commentInfo' />
-      <good-list :goodsList='recommends' />
+      <detail-comment-info :commentInfo='commentInfo'
+                            ref='detailCommentInfo' />
+      <good-list :goodsList='recommends'
+                  ref='detailRecommendInfo' />
     </scroll>
+
+    <detail-bottom-bar class='bottom-bar' />
    
   </div>
 </template>
@@ -24,6 +34,7 @@ import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
 import GoodList from '@/components/content/goods/GoodsList'
+import DetailBottomBar from './childComps/DetailBottomBar'
 import Scroll from '@/components/common/scroll/Scroll'
 import {itemListenerMixin} from '@/common/mixin.js'
 import {debounce} from '@/common/utils'
@@ -41,6 +52,7 @@ export default {
     DetailCommentInfo,
     GoodList,
     Scroll,
+    DetailBottomBar
   },
   data(){
     return {
@@ -53,6 +65,9 @@ export default {
       paramInfo:{},
       commentInfo:{},
       recommends:[],
+      themeTopYs:[],
+      themeTopY:null,
+      currentIndex:0
       
 
     }
@@ -87,9 +102,19 @@ export default {
     getRecommend().then(res=>{
       this.recommends = res.data.list
 
-    }
-    )
-
+    })
+    this.$nextTick(()=>{
+      this.getThemeTopY = debounce(()=>{
+        this.themeTopYs = []
+        this.themeTopYs.push(0)
+        this.themeTopYs.push(this.$refs.detailGoodsInfo.$el.offsetTop)
+        this.themeTopYs.push(this.$refs.detailCommentInfo.$el.offsetTop)
+        this.themeTopYs.push(this.$refs.detailRecommendInfo.$el.offsetTop)
+        this.themeTopYs.push(Number.MAX_VALUE);
+        console.log(this.themeTopYs);
+      },200)
+    })
+    
   },
   destroyed(){
     this.$bus.$off('ItemImageLoad',this.itemImgListener)
@@ -98,6 +123,31 @@ export default {
     imageLoad(){
       // this.$refs.scroll.refresh()
       debounce(this.$refs.scroll.refresh(),200)
+      this.getThemeTopY()
+     
+    },
+    titleClick(index){    
+      
+      this.$refs.scroll.scrollTo(0,-this.themeTopYs[index],200)
+    },
+    contentScroll(position){
+      const positionY = -position.y;
+      const length = this.themeTopYs.length;
+      for (let i = 0; i < length - 1; i++) {
+        // 判断做法、 hack
+        if (
+          this.currentIndex !== i &&
+          positionY >= this.themeTopYs[i] &&
+          positionY < this.themeTopYs[i + 1]
+        ) {
+          this.currentIndex = i; // 用于避免重复记录i的次数
+          this.$refs.nav.currentIndex = this.currentIndex;
+        }
+      }
+      // 2.确定BackTop是否显示
+      // this.isBackShow = (-position.y) > 1000
+      
+
     }
   },
   mounted() {
@@ -109,8 +159,8 @@ export default {
 
 <style scoped>
 #detail{
-  position: relative;
-  z-index:21;
+  /* position: relative; */
+  z-index:9;
   background-color: #fff;
   height: 100vh;
 }
@@ -120,6 +170,11 @@ export default {
   background-color:#fff;
 }
 .content{
-  height: calc(100% - 44px);
+  height: calc(100% - 102px);
+  overflow: hidden;
 }
+.bottom-bar{
+  position: relative;
+}
+
 </style>

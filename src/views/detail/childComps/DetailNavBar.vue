@@ -32,6 +32,7 @@ export default {
   methods:{
     ItemClick(index){
       this.currentIndex = index
+      this.$emit('titleClick',index)
     },
     backClisk(){
       this.$router.go(-1)
