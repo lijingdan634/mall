@@ -36,8 +36,8 @@ import TabControl from '@/components/content/tabControl/TabControl.vue'
 import GoodsList from '@/components/content/goods/GoodsList.vue'
 import Scroll from '@/components/common/scroll/Scroll.vue'
 import {getHomeMultidata,getHomeGoods} from '@/networks/home.js'//接口数据获取
-import BackTop from '@/components/content/backTop/BackTop.vue';
-import {itemListenerMixin} from '@/common/mixin.js'
+
+import {itemListenerMixin,backTopMixin} from '@/common/mixin.js'
 export default {
   name:'Home',
   components:{
@@ -48,7 +48,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
+    // BackTop
   },
   data(){
     return {
@@ -60,7 +60,7 @@ export default {
         'sell':{page: 0, list: []},
       },
       currentType:'pop',
-      isShow: false,
+      // isShow: false,
       tabOffsetTop:0, 
       isTabShow: false,
       saveY:0, 
@@ -89,7 +89,7 @@ export default {
      // 从事件总线（bus总线）中监听图像加载后刷新
 
    },
-  mixins:[itemListenerMixin],
+  mixins:[itemListenerMixin,backTopMixin],
   methods:{
     //轮播图加载完成
    SwiperImageLoad(){
@@ -109,11 +109,11 @@ export default {
       this.$refs.tabControl2.currentIndex = index;
        
     },
-    backClick(){
-      //当需要监听一个组件的原生组件时需要添加修饰符native进行监听
-      this.$refs.scroll.scrollTo(0,0)
+    // backClick(){
+    //   //当需要监听一个组件的原生组件时需要添加修饰符native进行监听
+    //   this.$refs.scroll.scrollTo(0,0)
 
-    },
+    // },
     contentScroll(position){
       //判断backTop是否显示
       if(position.y < -900){

@@ -37,7 +37,7 @@ export default {
   height: 58px;
   bottom: 0;
   left: 0;
-  height: 0;
+  /* height: 0; */
   z-index:1000;
   display: flex;
   text-align: center;

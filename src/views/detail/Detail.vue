@@ -19,7 +19,7 @@
       <good-list :goodsList='recommends'
                   ref='detailRecommendInfo' />
     </scroll>
-
+    <back-top @click.native='backClick' v-show="isShow" />
     <detail-bottom-bar class='bottom-bar' />
    
   </div>
@@ -36,7 +36,7 @@ import DetailCommentInfo from './childComps/DetailCommentInfo'
 import GoodList from '@/components/content/goods/GoodsList'
 import DetailBottomBar from './childComps/DetailBottomBar'
 import Scroll from '@/components/common/scroll/Scroll'
-import {itemListenerMixin} from '@/common/mixin.js'
+import {itemListenerMixin,backTopMixin} from '@/common/mixin.js'
 import {debounce} from '@/common/utils'
 import {getDetailData,Goods,Shop,GoodsParam,getRecommend} from '@/networks/detail'
 
@@ -68,8 +68,6 @@ export default {
       themeTopYs:[],
       themeTopY:null,
       currentIndex:0
-      
-
     }
   },
   created(){
@@ -145,7 +143,7 @@ export default {
         }
       }
       // 2.确定BackTop是否显示
-      // this.isBackShow = (-position.y) > 1000
+      this.isShow = (-position.y) > 1000
       
 
     }
@@ -153,7 +151,7 @@ export default {
   mounted() {
     
   },
-  mixins:[itemListenerMixin],
+  mixins:[itemListenerMixin,backTopMixin],
 }
 </script>
 
