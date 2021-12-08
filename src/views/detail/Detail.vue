@@ -3,6 +3,11 @@
     <detail-nav-bar class='detail-nav-bar'
                     @titleClick= 'titleClick'
                     ref='nav' />
+    <ul>
+      <li v-for='item in $store.state.cartList' :key=item.key>
+        {{item}}
+      </li>
+    </ul>
     <scroll class='content' 
             ref='scroll'
             @scroll='contentScroll'
@@ -20,7 +25,7 @@
                   ref='detailRecommendInfo' />
     </scroll>
     <back-top @click.native='backClick' v-show="isShow" />
-    <detail-bottom-bar class='bottom-bar' />
+    <detail-bottom-bar @addToCart='addToCart' class='bottom-bar' />
    
   </div>
 </template>
@@ -109,7 +114,7 @@ export default {
         this.themeTopYs.push(this.$refs.detailCommentInfo.$el.offsetTop)
         this.themeTopYs.push(this.$refs.detailRecommendInfo.$el.offsetTop)
         this.themeTopYs.push(Number.MAX_VALUE);
-        console.log(this.themeTopYs);
+        // console.log(this.themeTopYs);
       },200)
     })
     
@@ -118,6 +123,19 @@ export default {
     this.$bus.$off('ItemImageLoad',this.itemImgListener)
   },
   methods:{
+    addToCart(){
+      // console.log('----');
+      const product = {}
+      // console.log(this.goods);
+      product.image = this.topImages[0]
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.price = this.goods.realPrice
+      product.iid = this.iid
+      // 提交事件到actions中
+      this.$store.dispatch('addCart',product)
+
+    },
     imageLoad(){
       // this.$refs.scroll.refresh()
       debounce(this.$refs.scroll.refresh(),200)

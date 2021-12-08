@@ -16,23 +16,38 @@ var routes=[
   },
   {
     path:'/home',
-    component:Home
+    component:Home,
+    meta:{
+      TabBarShow: true,
+    }
   },
   {
     path:'/profile',
-    component:Profile
+    component:Profile,
+    meta:{
+      TabBarShow: true,
+    }
   },
   {
     path:'/category',
-    component:Category
+    component:Category,
+    meta:{
+      TabBarShow: true,
+    }
   },
   {
     path:'/cart',
-    component:Cart
+    component:Cart,
+    meta:{
+      TabBarShow: true,
+    }
   },
   {
     path:'/detail/:id',
-    component: Detail
+    component: Detail,
+    meta:{
+      TabBarShow: false,
+    }
   }
 ]
 
