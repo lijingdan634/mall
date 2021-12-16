@@ -6,8 +6,7 @@
                     :titles="['流行','新款','精选']" 
                     @currentList='currentList'
                     ref='tabControl1'></tab-control>
-    <scroll class="content" 
-            ref='scroll' 
+    <scroll  ref='scroll' 
             :probe-type='3' 
             @scroll='contentScroll'
             :pull-up-load='true'
@@ -77,7 +76,6 @@ export default {
     this.getHomeGoods('new'); 
   },
   activated(){
-    this.$refs.scroll.refresh()
     this.$refs.scroll.scrollTo(0,this.saveY, 0)
     this.$refs.scroll.refresh()
   },
@@ -170,14 +168,9 @@ export default {
   /* text-align: center; */
 }
 
-.content{
-  margin-top: 44px;
+#home ::v-deep .wrapper{
+  height: calc(100% - 93px);
   overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;        
-  right: 0;
-  bottom: 49px;
 }
 .fixed{
   position: relative;

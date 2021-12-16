@@ -3,13 +3,7 @@
     <detail-nav-bar class='detail-nav-bar'
                     @titleClick= 'titleClick'
                     ref='nav' />
-    <ul>
-      <li v-for='item in $store.state.cartList' :key=item.key>
-        {{item}}
-      </li>
-    </ul>
-    <scroll class='content' 
-            ref='scroll'
+    <scroll ref='scroll'
             @scroll='contentScroll'
             :probeType='3'>
       <detail-swiper :topImages = 'topImages'></detail-swiper>
@@ -162,8 +156,6 @@ export default {
       }
       // 2.确定BackTop是否显示
       this.isShow = (-position.y) > 1000
-      
-
     }
   },
   mounted() {
@@ -185,7 +177,8 @@ export default {
   z-index:22;
   background-color:#fff;
 }
-.content{
+/* 父组件中设置子组件样式 */
+#detail ::v-deep .wrapper{
   height: calc(100% - 102px);
   overflow: hidden;
 }
