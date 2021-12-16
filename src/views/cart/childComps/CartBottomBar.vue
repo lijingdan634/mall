@@ -2,7 +2,7 @@
   <div class="bottom-bar">
     
     <div class="check-content">
-      <check-button class="check-button" />
+      <check-button class="check-button" :is-checked='isCheckedAll' @click.native='selectAll'  />
       <span>全选</span>
     </div>
     <div class="price">
@@ -22,19 +22,38 @@ export default {
   components:{
     CheckButton
   },
+  data(){
+    return { 
+      ReverseCheck: false
+    }
+  },
+
   computed:{
     ...mapGetters(['cartList','cartLength']),
     totalPrice(){
-      // console.log(this.cartList);
       return '￥'+this.cartList.filter(item=>item.checked).reduce((preVal,item)=>{
         return preVal + item.price*item.count
       },0).toFixed(2)
-
     },
     checkLength(){
       return this.cartList.filter(item=>item.checked).length
+    },
+    isCheckedAll(){
+      if(this.cartLength == 0) return false
+      return this.cartList.filter(item=>item.checked).length === this.cartLength
     }
+  },
+  methods:{
+   selectAll(){
+     if(this.isCheckedAll){
+       this.cartList.forEach(item=>item.checked = false)
+     }else{
+       this.cartList.forEach(item=>item.checked = true)
+     }
+   }
+    
   }
+
 }
  
 </script>
