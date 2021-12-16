@@ -8,7 +8,7 @@
     <div class="price">
       合计: {{totalPrice}}
     </div>
-    <div class="right" >
+    <div class="right" @click='calcClick' >
       去结算({{checkLength}})
     </div>
 
@@ -49,6 +49,11 @@ export default {
        this.cartList.forEach(item=>item.checked = false)
      }else{
        this.cartList.forEach(item=>item.checked = true)
+     }
+   },
+   calcClick(){
+     if(!this.cartList.find(item=>item.checked)){
+       this.$toast.show('结算商品为空',1500)
      }
    }
     

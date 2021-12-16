@@ -20,11 +20,12 @@
     </scroll>
     <back-top @click.native='backClick' v-show="isShow" />
     <detail-bottom-bar @addToCart='addToCart' class='bottom-bar' />
-   
+    <!-- <toast :message ='message' :isShow='isShow' /> -->
   </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 import DetailNavBar from './childComps/DetailNavBar'
 import DetailSwiper from './childComps/DetailSwiper'
 import DetailBaseInfo from './childComps/DetailBaseInfo'
@@ -38,7 +39,7 @@ import Scroll from '@/components/common/scroll/Scroll'
 import {itemListenerMixin,backTopMixin} from '@/common/mixin.js'
 import {debounce} from '@/common/utils'
 import {getDetailData,Goods,Shop,GoodsParam,getRecommend} from '@/networks/detail'
-
+// import Toast from '@/components/common/toast/Toast'
 export default {
   name:'Detail',
   components:{
@@ -51,7 +52,8 @@ export default {
     DetailCommentInfo,
     GoodList,
     Scroll,
-    DetailBottomBar
+    DetailBottomBar,
+    // Toast
   },
   data(){
     return {
@@ -66,7 +68,8 @@ export default {
       recommends:[],
       themeTopYs:[],
       themeTopY:null,
-      currentIndex:0
+      currentIndex:0, 
+
     }
   },
   created(){
@@ -117,8 +120,9 @@ export default {
     this.$bus.$off('ItemImageLoad',this.itemImgListener)
   },
   methods:{
+    ...mapActions(['addCart']),
     addToCart(){
-      // console.log('----');
+
       const product = {}
       // console.log(this.goods);
       product.image = this.topImages[0]
@@ -127,7 +131,13 @@ export default {
       product.price = this.goods.realPrice
       product.iid = this.iid
       // 提交事件到actions中
-      this.$store.dispatch('addCart',product)
+      // this.$store.dispatch('addCart',product)
+      this.addCart(product).then(res=>{
+        console.log(this.$toast);
+        this.$toast.show(res,1500)
+
+      })
+
 
     },
     imageLoad(){
