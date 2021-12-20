@@ -6,7 +6,6 @@ export function getDetailData(iid){
     params: {
       iid
     }
-
   })
 }
 

@@ -10,10 +10,10 @@ obj.install = function(Vue){
 
   //3.将组件对象手动挂载到一个DOM元素上
   toast.$mount(document.createElement('div'))
-
   //4.toast.$el对应的就是div
   document.body.appendChild(toast.$el)
   Vue.prototype.$toast = toast
+
 }
 
 export default obj
