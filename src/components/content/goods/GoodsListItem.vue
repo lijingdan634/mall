@@ -6,6 +6,7 @@
         <p>{{goodsListItem.title}}</p>
         <span class="price">{{goodsListItem.price}}</span>
         <span class="collect">{{goodsListItem.cfav}}</span>
+        <!-- {{goodsListItem.img}} -->
     </div>
   </div>
 </template>
@@ -35,7 +36,8 @@ export default {
   },
   computed:{
     showImage(){
-      return this.goodsListItem.image || this.goodsListItem.show.img
+
+      return  this.goodsListItem.img || this.goodsListItem.image || this.goodsListItem.show.img
     }
   }
 }

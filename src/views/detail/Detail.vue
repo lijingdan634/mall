@@ -192,6 +192,7 @@ export default {
   height: calc(100% - 102px);
   overflow: hidden;
 }
+
 .bottom-bar{
   position: relative;
 }

@@ -69,7 +69,6 @@ export default {
 .nav-bar {
   background-color: var(--color-tint);
   color: #fff;
-  font-size: 18px;
   font-weight: 500;
 }
 .account {
