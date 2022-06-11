@@ -11,7 +11,11 @@
       <div class="item-desc">{{ product.desc }}</div>
       <div class="info-bottom">
         <div class="item-price left">￥{{ product.price }}</div>
-        <div class="item-count right">x{{ product.count }}</div>
+        <div class="item-count right">
+          <button @click='countDer'>-</button>
+          {{ product.count }}
+          <button @click='countInc'>+</button>
+          </div>
         
       </div>
     </div>
@@ -29,6 +33,7 @@ export default {
         return {};
       },
     },
+    
   },
   components:{
     CheckButton
@@ -37,7 +42,17 @@ export default {
     checkClick() {
       this.product.checked = !this.product.checked
       // console.log(this.product);
+    },
+    countDer(){
+      
+      this.$emit('productCountDecreament',this.product)
+      
+    },
+    countInc(){
+      this.$emit('productCountIncreament',this.product)
+      // console.log('lalal');
     }
+
   }
 };
 </script>

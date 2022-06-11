@@ -13,7 +13,6 @@ export default{
         resolve('数量加1')
       }
     })
-    
-
   }
+  
 }

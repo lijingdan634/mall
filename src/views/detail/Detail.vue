@@ -124,7 +124,6 @@ export default {
     addToCart(){
 
       const product = {}
-      // console.log(this.goods);
       product.image = this.topImages[0]
       product.title = this.goods.title
       product.desc = this.goods.desc
