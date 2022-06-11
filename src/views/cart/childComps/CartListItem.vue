@@ -12,9 +12,9 @@
       <div class="info-bottom">
         <div class="item-price left">￥{{ product.price }}</div>
         <div class="item-count right">
-          <button @click='countDer'>-</button>
+          <button @click='productCountDecreament(product)'>-</button>
           {{ product.count }}
-          <button @click='countInc'>+</button>
+          <button @click='productCountIncreament(product)'>+</button>
           </div>
         
       </div>
@@ -24,6 +24,7 @@
 
 <script>
 import CheckButton from '@/components/content/checkButton/CheckButton';
+import {mapMutations} from 'vuex'
 export default {
   name: "CartListItem",
   props: {
@@ -39,19 +40,22 @@ export default {
     CheckButton
   },
   methods: {
+    ...mapMutations(['dec_counter','add_counter']),
     checkClick() {
       this.product.checked = !this.product.checked
       // console.log(this.product);
     },
-    countDer(){
-      
-      this.$emit('productCountDecreament',this.product)
-      
-    },
-    countInc(){
-      this.$emit('productCountIncreament',this.product)
-      // console.log('lalal');
-    }
+    productCountIncreament(product){
+      this.add_counter(product)
+   },
+    productCountDecreament(product){
+      // console.log(val);
+      if(product.count <=1){
+        return;
+      }
+      this.dec_counter(product)
+  }
+ 
 
   }
 };
